@@ -1,16 +1,20 @@
 package com.example.noutee.ui.theme
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.noutee.DB.Note
 import com.example.noutee.repository.NoteViewModel
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteApp(viewModel: NoteViewModel) {
     val notes by viewModel.notes.collectAsState()
@@ -72,14 +76,29 @@ fun NoteItem(note: Note, onDelete: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clickable { onDelete() },
-        elevation = 4.dp
+            .padding(vertical = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(note.title, style = MaterialTheme.typography.h6)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = note.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = onDelete) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Delete note",
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(note.content, style = MaterialTheme.typography.body1)
+            Text(note.content, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
